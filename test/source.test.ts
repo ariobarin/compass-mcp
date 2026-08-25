@@ -14,8 +14,10 @@ function fixtureFetcher(calls: string[]) {
   return async (input: string | URL | Request): Promise<Response> => {
     const url = String(input);
     calls.push(url);
-    if (url.endsWith("/commits/main")) {
-      return Response.json({ sha: revision });
+    if (url.includes(".git/info/refs?service=git-upload-pack")) {
+      return new Response(`001e# service=git-upload-pack\n0000${revision} refs/heads/main\n`, {
+        headers: { "content-type": "application/x-git-upload-pack-advertisement" }
+      });
     }
     if (url.endsWith(`/${revision}/codex/AGENTS.md`)) {
       return new Response(profile);
@@ -57,5 +59,5 @@ test("fresh revision checks bypass the short head cache", async () => {
   await source.resolveRevision();
   await source.resolveRevision(true);
 
-  assert.equal(calls.filter(url => url.endsWith("/commits/main")).length, 2);
+  assert.equal(calls.filter(url => url.includes(".git/info/refs?service=git-upload-pack")).length, 2);
 });

@@ -2,7 +2,7 @@ import { CompassCatalog } from "./catalog.js";
 
 const REPOSITORY = "ariobarin/compass";
 const BRANCH = "main";
-const HEAD_URL = `https://api.github.com/repos/${REPOSITORY}/commits/${BRANCH}`;
+const HEAD_URL = `https://github.com/${REPOSITORY}.git/info/refs?service=git-upload-pack`;
 const RAW_ROOT = `https://raw.githubusercontent.com/${REPOSITORY}`;
 const DEFAULT_HEAD_CACHE_TTL_MS = 15_000;
 
@@ -58,24 +58,23 @@ export class GitHubCompassSource {
     }
 
     const response = await this.fetcher(HEAD_URL, {
-      headers: {
-        accept: "application/vnd.github+json",
-        "user-agent": "compass-mcp"
-      }
+      headers: { "user-agent": "compass-mcp" }
     });
     if (!response.ok) {
       throw new Error(`Resolve Compass main failed with HTTP ${response.status}`);
     }
-    const body = await response.json() as { sha?: unknown };
-    if (typeof body.sha !== "string" || !/^[a-f0-9]{40}$/i.test(body.sha)) {
-      throw new Error("GitHub returned an invalid Compass revision");
+    const body = await response.text();
+    const match = body.match(/([a-f0-9]{40}) refs\/heads\/main(?:\0|\n|$)/i);
+    if (!match) {
+      throw new Error("GitHub returned no Compass main revision");
     }
 
+    const revision = match[1];
     this.headCache = {
-      revision: body.sha,
+      revision,
       expiresAt: now + this.headCacheTtlMs
     };
-    return body.sha;
+    return revision;
   }
 
   async loadCurrentCatalog(freshRevision = false): Promise<CompassCatalog> {
