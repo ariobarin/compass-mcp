@@ -16,6 +16,12 @@ const home = await homeResponse.text();
 assert.match(home, new RegExp(`data-source-revision="${health.source_revision}"`));
 assert.match(home, />handoff</);
 assert.doesNotMatch(home, /action-items-to-prs/);
+assert.match(home, /data-copy-target="mcp-endpoint"[^>]*>Copy<\/button>/);
+
+const scriptResponse = await fetch(new URL("/site.js", endpoint));
+assert.equal(scriptResponse.status, 200);
+assert.match(scriptResponse.headers.get("content-type") ?? "", /^text\/javascript/);
+assert.match(await scriptResponse.text(), /navigator\.clipboard\.writeText/);
 
 const client = new Client({ name: "compass-remote-smoke", version: "0.3.0" });
 const transport = new StreamableHTTPClientTransport(endpoint);

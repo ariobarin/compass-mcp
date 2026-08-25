@@ -44,6 +44,16 @@ assert.doesNotMatch(home, /\d+ skills on/);
 assert.doesNotMatch(home, /Read-only\. Every request resolves one Compass revision/);
 assert.match(home, /MCP endpoint[\s\S]*blast-radius/);
 assert.match(home, /https:\/\/compass\.ariobarin\.com\/mcp/);
+assert.match(home, /data-copy-target="mcp-endpoint"[^>]*>Copy<\/button>/);
+assert.match(home, /<script src="\/site\.js" defer><\/script>/);
+assert.match(homeResponse.headers.get("content-security-policy") ?? "", /script-src 'self'/);
+
+const scriptResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/site.js"));
+assert.equal(scriptResponse.status, 200);
+assert.match(scriptResponse.headers.get("content-type") ?? "", /^text\/javascript/);
+const script = await scriptResponse.text();
+assert.match(script, /navigator\.clipboard\.writeText/);
+assert.match(script, /button\.textContent = "Copied"/);
 
 const faviconResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/favicon.svg"));
 assert.equal(faviconResponse.status, 200);

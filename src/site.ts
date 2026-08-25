@@ -125,9 +125,39 @@ export function renderHome(catalog: CompassCatalog): Response {
       font: 600 14.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
+    .endpoint-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
     .endpoint-value {
+      flex: 1 1 auto;
+      min-width: 0;
       overflow-x: auto;
       white-space: nowrap;
+    }
+
+    .copy-button {
+      flex: 0 0 auto;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: 600 12px/1 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .copy-button:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    .copy-button:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
     }
 
     .skills {
@@ -187,7 +217,10 @@ export function renderHome(catalog: CompassCatalog): Response {
     <section class="content" aria-label="Compass MCP and skills">
       <div class="endpoint-row">
         <span class="endpoint-label">MCP endpoint</span>
-        <code class="endpoint-value">${MCP_ENDPOINT}</code>
+        <span class="endpoint-control">
+          <code class="endpoint-value" id="mcp-endpoint">${MCP_ENDPOINT}</code>
+          <button class="copy-button" type="button" data-copy-target="mcp-endpoint" aria-live="polite">Copy</button>
+        </span>
       </div>
       <ul class="skills">${skillRows}
       </ul>
@@ -198,6 +231,7 @@ export function renderHome(catalog: CompassCatalog): Response {
       <a href="${escapeHtml(revisionUrl)}">Source ${escapeHtml(shortRevision(revision))}</a>
     </footer>
   </main>
+  <script src="/site.js" defer></script>
 </body>
 </html>`;
 
@@ -206,8 +240,40 @@ export function renderHome(catalog: CompassCatalog): Response {
     headers: {
       "content-type": "text/html; charset=utf-8",
       "cache-control": "public, max-age=15",
-      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
       "referrer-policy": "no-referrer",
+      "x-content-type-options": "nosniff"
+    }
+  });
+}
+
+export function renderSiteScript(): Response {
+  const script = `const button = document.querySelector("[data-copy-target]");
+if (button instanceof HTMLButtonElement) {
+  button.addEventListener("click", async () => {
+    const targetId = button.dataset.copyTarget;
+    const target = targetId ? document.getElementById(targetId) : null;
+    const value = target?.textContent?.trim();
+    if (!value) return;
+
+    try {
+      await navigator.clipboard.writeText(value);
+      button.textContent = "Copied";
+    } catch {
+      button.textContent = "Copy failed";
+    }
+
+    window.setTimeout(() => {
+      button.textContent = "Copy";
+    }, 1200);
+  });
+}`;
+
+  return new Response(script, {
+    status: 200,
+    headers: {
+      "content-type": "text/javascript; charset=utf-8",
+      "cache-control": "public, max-age=86400",
       "x-content-type-options": "nosniff"
     }
   });

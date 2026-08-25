@@ -1,7 +1,7 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createCompassMcpServer } from "../src/server.js";
 import { GitHubCompassSource, compassBranch, compassRepository } from "../src/source.js";
-import { renderFavicon, renderHome } from "../src/site.js";
+import { renderFavicon, renderHome, renderSiteScript } from "../src/site.js";
 
 const source = new GitHubCompassSource();
 
@@ -29,6 +29,10 @@ export async function handleCompassRequest(request: Request): Promise<Response> 
 
   if (url.pathname === "/favicon.svg" && request.method === "GET") {
     return renderFavicon();
+  }
+
+  if (url.pathname === "/site.js" && request.method === "GET") {
+    return renderSiteScript();
   }
 
   if (url.pathname === "/healthz" && request.method === "GET") {
