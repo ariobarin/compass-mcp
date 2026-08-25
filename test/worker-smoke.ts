@@ -31,6 +31,11 @@ assert.match(home, new RegExp(`data-source-revision="${health.source_revision}"`
 assert.match(home, new RegExp(`>${health.source_revision.slice(0, 8)}<`));
 assert.match(home, />handoff</);
 assert.doesNotMatch(home, /action-items-to-prs/);
+assert.doesNotMatch(home, /MCP online/);
+assert.doesNotMatch(home, /ariobarin \/ compass/);
+assert.doesNotMatch(home, />Status</);
+assert.doesNotMatch(home, />Online</);
+assert.doesNotMatch(home, />Compass MCP</);
 assert.match(home, /https:\/\/compass\.ariobarin\.com\/mcp/);
 
 const faviconResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/favicon.svg"));

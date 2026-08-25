@@ -47,8 +47,6 @@ export function renderHome(catalog: CompassCatalog): Response {
       --muted: #676767;
       --line: #ddddda;
       --soft: #efefec;
-      --accent: #176b4d;
-      --accent-soft: #dff3e9;
     }
 
     @media (prefers-color-scheme: dark) {
@@ -59,8 +57,6 @@ export function renderHome(catalog: CompassCatalog): Response {
         --muted: #a2a29d;
         --line: #30302d;
         --soft: #20201e;
-        --accent: #72d4ab;
-        --accent-soft: #173a2d;
       }
     }
 
@@ -82,13 +78,7 @@ export function renderHome(catalog: CompassCatalog): Response {
       padding: 28px 0 64px;
     }
 
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      min-height: 40px;
-    }
+    nav { min-height: 40px; }
 
     .brand {
       text-decoration: none;
@@ -96,33 +86,9 @@ export function renderHome(catalog: CompassCatalog): Response {
       letter-spacing: -0.02em;
     }
 
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-soft);
-    }
-
     .hero {
       padding: 112px 0 72px;
       max-width: 760px;
-    }
-
-    .eyebrow {
-      margin: 0 0 18px;
-      color: var(--muted);
-      font: 600 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
     }
 
     h1 {
@@ -164,7 +130,7 @@ export function renderHome(catalog: CompassCatalog): Response {
 
     .facts {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       border: 1px solid var(--line);
       border-radius: 12px;
       background: var(--panel);
@@ -289,9 +255,8 @@ export function renderHome(catalog: CompassCatalog): Response {
     @media (max-width: 700px) {
       main { width: min(100% - 28px, 920px); }
       .hero { padding: 78px 0 52px; }
-      .facts { grid-template-columns: 1fr 1fr; }
-      .fact:nth-child(3) { border-left: 0; border-top: 1px solid var(--line); }
-      .fact:nth-child(4) { border-top: 1px solid var(--line); }
+      .facts { grid-template-columns: 1fr; }
+      .fact + .fact { border-left: 0; border-top: 1px solid var(--line); }
       .skills a { grid-template-columns: 1fr; gap: 6px; }
       .section-head { align-items: flex-start; flex-direction: column; gap: 6px; }
     }
@@ -301,11 +266,9 @@ export function renderHome(catalog: CompassCatalog): Response {
   <main>
     <nav>
       <a class="brand" href="/">Compass</a>
-      <span class="status"><span class="status-dot" aria-hidden="true"></span>MCP online</span>
     </nav>
 
     <header class="hero">
-      <p class="eyebrow">ariobarin / compass</p>
       <h1>Engineering preferences and workflows for agents.</h1>
       <p class="lede">Compass is reviewed source for portable agent behavior. This page and the ChatGPT MCP read the same exact Compass revision.</p>
       <div class="actions">
@@ -314,11 +277,7 @@ export function renderHome(catalog: CompassCatalog): Response {
       </div>
     </header>
 
-    <section class="facts" aria-label="Service status">
-      <div class="fact">
-        <span class="fact-label">Status</span>
-        <span class="fact-value">Online</span>
-      </div>
+    <section class="facts">
       <div class="fact">
         <span class="fact-label">Revision</span>
         <a class="fact-value" href="${escapeHtml(revisionUrl)}"><code>${escapeHtml(shortRevision(revision))}</code></a>
@@ -351,7 +310,6 @@ export function renderHome(catalog: CompassCatalog): Response {
     <footer>
       <a href="/healthz">Health JSON</a>
       <a href="${escapeHtml(revisionUrl)}">Source ${escapeHtml(shortRevision(revision))}</a>
-      <span>Compass MCP</span>
     </footer>
   </main>
 </body>
