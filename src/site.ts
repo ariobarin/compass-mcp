@@ -73,12 +73,12 @@ export function renderHome(catalog: CompassCatalog): Response {
     a { color: inherit; }
 
     main {
-      width: min(920px, calc(100% - 40px));
+      width: min(960px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 28px 0 64px;
+      padding: 24px 0 56px;
     }
 
-    nav { min-height: 40px; }
+    nav { min-height: 30px; }
 
     .brand {
       text-decoration: none;
@@ -87,37 +87,38 @@ export function renderHome(catalog: CompassCatalog): Response {
     }
 
     .hero {
-      padding: 112px 0 72px;
-      max-width: 760px;
+      padding: 68px 0 48px;
+      max-width: 720px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(42px, 8vw, 78px);
-      line-height: 0.98;
-      letter-spacing: -0.055em;
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -0.045em;
       font-weight: 680;
     }
 
     .lede {
-      max-width: 660px;
-      margin: 28px 0 0;
+      max-width: 640px;
+      margin: 22px 0 0;
       color: var(--muted);
-      font-size: clamp(18px, 2.5vw, 22px);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.55;
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 32px;
+      margin-top: 26px;
     }
 
     .button {
       display: inline-flex;
       align-items: center;
-      min-height: 42px;
-      padding: 0 15px;
+      min-height: 40px;
+      padding: 0 14px;
       border: 1px solid var(--line);
       border-radius: 9px;
       background: var(--panel);
@@ -138,7 +139,7 @@ export function renderHome(catalog: CompassCatalog): Response {
     }
 
     .fact {
-      padding: 18px;
+      padding: 16px 18px;
       min-width: 0;
     }
 
@@ -167,7 +168,7 @@ export function renderHome(catalog: CompassCatalog): Response {
     }
 
     section.content {
-      margin-top: 72px;
+      margin-top: 56px;
     }
 
     .section-head {
@@ -175,20 +176,20 @@ export function renderHome(catalog: CompassCatalog): Response {
       align-items: baseline;
       justify-content: space-between;
       gap: 20px;
-      padding-bottom: 16px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--line);
     }
 
     h2 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
       letter-spacing: -0.025em;
     }
 
     .section-note {
       margin: 0;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .skills {
@@ -201,40 +202,42 @@ export function renderHome(catalog: CompassCatalog): Response {
 
     .skills a {
       display: grid;
-      grid-template-columns: minmax(160px, 220px) 1fr;
-      gap: 28px;
-      padding: 18px 4px;
+      grid-template-columns: minmax(140px, 185px) 1fr;
+      gap: 22px;
+      padding: 20px 2px;
       text-decoration: none;
     }
 
     .skills a:hover .skill-name { text-decoration: underline; }
 
     .skill-name {
-      font: 600 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font: 600 14.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
     .skill-description {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
+      line-height: 1.55;
     }
 
     .endpoint {
-      margin-top: 72px;
-      padding: 24px;
+      margin-top: 56px;
+      padding: 20px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 10px;
       background: var(--panel);
     }
 
     .endpoint p {
-      margin: 9px 0 0;
+      margin: 7px 0 0;
       color: var(--muted);
+      font-size: 15px;
     }
 
     .endpoint-code {
       display: block;
-      margin-top: 18px;
-      padding: 13px 14px;
+      margin-top: 14px;
+      padding: 11px 12px;
       overflow-x: auto;
       border-radius: 8px;
       background: var(--soft);
@@ -245,16 +248,16 @@ export function renderHome(catalog: CompassCatalog): Response {
       display: flex;
       flex-wrap: wrap;
       gap: 18px;
-      margin-top: 48px;
-      padding-top: 20px;
+      margin-top: 40px;
+      padding-top: 18px;
       border-top: 1px solid var(--line);
       color: var(--muted);
-      font-size: 13px;
+      font-size: 14px;
     }
 
     @media (max-width: 700px) {
-      main { width: min(100% - 28px, 920px); }
-      .hero { padding: 78px 0 52px; }
+      main { width: min(100% - 28px, 960px); }
+      .hero { padding: 48px 0 40px; }
       .facts { grid-template-columns: 1fr; }
       .fact + .fact { border-left: 0; border-top: 1px solid var(--line); }
       .skills a { grid-template-columns: 1fr; gap: 6px; }
