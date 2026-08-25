@@ -78,7 +78,13 @@ export function renderHome(catalog: CompassCatalog): Response {
       padding: 24px 0 56px;
     }
 
-    nav { min-height: 30px; }
+    nav {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 30px;
+    }
 
     .brand {
       text-decoration: none;
@@ -86,8 +92,15 @@ export function renderHome(catalog: CompassCatalog): Response {
       letter-spacing: -0.02em;
     }
 
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .hero {
-      padding: 68px 0 48px;
+      padding: 52px 0 34px;
       max-width: 720px;
     }
 
@@ -107,75 +120,20 @@ export function renderHome(catalog: CompassCatalog): Response {
       line-height: 1.55;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 26px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      min-height: 40px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      background: var(--panel);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .button:hover { border-color: var(--muted); }
-
-    .facts {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--panel);
-      overflow: hidden;
-    }
-
-    .fact {
-      padding: 16px 18px;
-      min-width: 0;
-    }
-
-    .fact + .fact { border-left: 1px solid var(--line); }
-
-    .fact-label {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
-    .fact-value {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 650;
-      white-space: nowrap;
-    }
-
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.92em;
     }
 
     section.content {
-      margin-top: 56px;
+      margin-top: 0;
     }
 
     .section-head {
       display: flex;
-      align-items: baseline;
+      align-items: flex-end;
       justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
       padding-bottom: 14px;
       border-bottom: 1px solid var(--line);
     }
@@ -187,9 +145,17 @@ export function renderHome(catalog: CompassCatalog): Response {
     }
 
     .section-note {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section-meta {
+      flex: 0 0 auto;
       margin: 0;
       color: var(--muted);
       font-size: 13px;
+      white-space: nowrap;
     }
 
     .skills {
@@ -257,11 +223,12 @@ export function renderHome(catalog: CompassCatalog): Response {
 
     @media (max-width: 700px) {
       main { width: min(100% - 28px, 960px); }
-      .hero { padding: 48px 0 40px; }
-      .facts { grid-template-columns: 1fr; }
-      .fact + .fact { border-left: 0; border-top: 1px solid var(--line); }
+      nav { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .nav-links { flex-wrap: wrap; gap: 12px; font-size: 13px; }
+      .hero { padding: 38px 0 30px; }
       .skills a { grid-template-columns: 1fr; gap: 6px; }
-      .section-head { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .section-meta { white-space: normal; }
     }
   </style>
 </head>
@@ -269,36 +236,24 @@ export function renderHome(catalog: CompassCatalog): Response {
   <main>
     <nav>
       <a class="brand" href="/">Compass</a>
+      <div class="nav-links">
+        <a href="${escapeHtml(compassRepository)}">Compass source</a>
+        <a href="${SERVICE_REPOSITORY}">MCP source</a>
+      </div>
     </nav>
 
     <header class="hero">
       <h1>Engineering preferences and workflows for agents.</h1>
       <p class="lede">Compass is reviewed source for portable agent behavior. This page and the ChatGPT MCP read the same exact Compass revision.</p>
-      <div class="actions">
-        <a class="button" href="${escapeHtml(compassRepository)}">View Compass</a>
-        <a class="button" href="${SERVICE_REPOSITORY}">View MCP source</a>
-      </div>
     </header>
-
-    <section class="facts">
-      <div class="fact">
-        <span class="fact-label">Revision</span>
-        <a class="fact-value" href="${escapeHtml(revisionUrl)}"><code>${escapeHtml(shortRevision(revision))}</code></a>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Skills</span>
-        <span class="fact-value">${skills.length}</span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Branch</span>
-        <span class="fact-value"><code>${escapeHtml(compassBranch)}</code></span>
-      </div>
-    </section>
 
     <section class="content">
       <div class="section-head">
-        <h2>Current skills</h2>
-        <p class="section-note">Selected by the Compass manifest at this revision.</p>
+        <div>
+          <h2>Current skills</h2>
+          <p class="section-note">Selected by the Compass manifest at this revision.</p>
+        </div>
+        <p class="section-meta">${skills.length} skills on <code>${escapeHtml(compassBranch)}</code> at <a href="${escapeHtml(revisionUrl)}"><code>${escapeHtml(shortRevision(revision))}</code></a></p>
       </div>
       <ul class="skills">${skillRows}
       </ul>
