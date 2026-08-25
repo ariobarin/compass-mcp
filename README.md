@@ -2,7 +2,9 @@
 
 Read-only MCP access to the current reviewed Compass profile and selected skills for regular ChatGPT chat mode.
 
-Production: `https://compass.ariobarin.com/mcp`
+Website: `https://compass.ariobarin.com/`
+
+MCP endpoint: `https://compass.ariobarin.com/mcp`
 
 ## Freshness model
 
@@ -11,6 +13,8 @@ The server does not bundle Compass content. For each MCP request it resolves `ar
 Normal requests cache the branch head for at most 15 seconds. Immutable revision catalogs are reused inside a Worker isolate. `GET /healthz?fresh=1` bypasses the branch-head cache and returns `source_revision`, so CI can compare production with a known Compass commit.
 
 A single request never mixes files from different Compass revisions.
+
+The homepage is rendered by the same Worker from the same revision-pinned catalog. It shows the live source revision, branch, and selected skill list without maintaining a second copy of Compass content.
 
 ## Tools
 

@@ -22,6 +22,21 @@ assert.equal(healthResponse.status, 200);
 const health = await healthResponse.json() as { source_revision: string };
 assert.match(health.source_revision, /^[a-f0-9]{40}$/);
 
+const homeResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/"));
+assert.equal(homeResponse.status, 200);
+assert.match(homeResponse.headers.get("content-type") ?? "", /^text\/html/);
+const home = await homeResponse.text();
+assert.match(home, /<title>Compass<\/title>/);
+assert.match(home, new RegExp(`data-source-revision="${health.source_revision}"`));
+assert.match(home, new RegExp(`>${health.source_revision.slice(0, 8)}<`));
+assert.match(home, />handoff</);
+assert.doesNotMatch(home, /action-items-to-prs/);
+assert.match(home, /https:\/\/compass\.ariobarin\.com\/mcp/);
+
+const faviconResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/favicon.svg"));
+assert.equal(faviconResponse.status, 200);
+assert.match(faviconResponse.headers.get("content-type") ?? "", /^image\/svg\+xml/);
+
 const initialized = await rpc("initialize", {
   protocolVersion: "2025-06-18",
   capabilities: {},

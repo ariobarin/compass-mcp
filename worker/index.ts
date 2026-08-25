@@ -1,6 +1,7 @@
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createCompassMcpServer } from "../src/server.js";
 import { GitHubCompassSource, compassBranch, compassRepository } from "../src/source.js";
+import { renderFavicon, renderHome } from "../src/site.js";
 
 const source = new GitHubCompassSource();
 
@@ -13,6 +14,22 @@ function jsonResponse(body: unknown, status = 200, headers?: HeadersInit): Respo
 
 export async function handleCompassRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
+
+  if (url.pathname === "/" && request.method === "GET") {
+    try {
+      return renderHome(await source.loadCurrentCatalog());
+    } catch (error) {
+      console.error("Compass homepage source load failed", error);
+      return new Response("Compass source unavailable", {
+        status: 503,
+        headers: { "content-type": "text/plain; charset=utf-8" }
+      });
+    }
+  }
+
+  if (url.pathname === "/favicon.svg" && request.method === "GET") {
+    return renderFavicon();
+  }
 
   if (url.pathname === "/healthz" && request.method === "GET") {
     try {

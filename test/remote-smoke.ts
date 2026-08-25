@@ -9,6 +9,14 @@ assert.equal(healthResponse.status, 200);
 const health = await healthResponse.json() as { source_revision: string };
 assert.match(health.source_revision, /^[a-f0-9]{40}$/);
 
+const homeResponse = await fetch(new URL("/", endpoint));
+assert.equal(homeResponse.status, 200);
+assert.match(homeResponse.headers.get("content-type") ?? "", /^text\/html/);
+const home = await homeResponse.text();
+assert.match(home, new RegExp(`data-source-revision="${health.source_revision}"`));
+assert.match(home, />handoff</);
+assert.doesNotMatch(home, /action-items-to-prs/);
+
 const client = new Client({ name: "compass-remote-smoke", version: "0.3.0" });
 const transport = new StreamableHTTPClientTransport(endpoint);
 
