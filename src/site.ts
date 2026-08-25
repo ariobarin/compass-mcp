@@ -1,5 +1,5 @@
 import type { CompassCatalog } from "./catalog.js";
-import { compassBranch, compassRepository } from "./source.js";
+import { compassRepository } from "./source.js";
 
 const SERVICE_REPOSITORY = "https://github.com/ariobarin/compass-mcp";
 const MCP_ENDPOINT = "https://compass.ariobarin.com/mcp";
@@ -108,29 +108,25 @@ export function renderHome(catalog: CompassCatalog): Response {
       margin-top: 48px;
     }
 
-    .section-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-      padding-bottom: 14px;
+    .endpoint-row,
+    .skills a {
+      display: grid;
+      grid-template-columns: minmax(140px, 185px) 1fr;
+      gap: 22px;
+      padding: 20px 2px;
+    }
+
+    .endpoint-row {
+      border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
 
-    h1,
-    h2 {
-      margin: 0;
-      letter-spacing: -0.025em;
+    .endpoint-label {
+      font: 600 14.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
-    h1 { font-size: 28px; }
-    h2 { font-size: 22px; }
-
-    .section-meta {
-      flex: 0 0 auto;
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
+    .endpoint-value {
+      overflow-x: auto;
       white-space: nowrap;
     }
 
@@ -143,10 +139,6 @@ export function renderHome(catalog: CompassCatalog): Response {
     .skills li { border-bottom: 1px solid var(--line); }
 
     .skills a {
-      display: grid;
-      grid-template-columns: minmax(140px, 185px) 1fr;
-      gap: 22px;
-      padding: 20px 2px;
       text-decoration: none;
     }
 
@@ -160,30 +152,6 @@ export function renderHome(catalog: CompassCatalog): Response {
       color: var(--muted);
       font-size: 15px;
       line-height: 1.55;
-    }
-
-    .endpoint {
-      margin-top: 56px;
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      background: var(--panel);
-    }
-
-    .endpoint p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    .endpoint-code {
-      display: block;
-      margin-top: 14px;
-      padding: 11px 12px;
-      overflow-x: auto;
-      border-radius: 8px;
-      background: var(--soft);
-      white-space: nowrap;
     }
 
     footer {
@@ -201,9 +169,8 @@ export function renderHome(catalog: CompassCatalog): Response {
       main { width: min(100% - 28px, 960px); }
       nav { align-items: flex-start; flex-direction: column; gap: 8px; }
       .nav-links { flex-wrap: wrap; gap: 12px; font-size: 13px; }
+      .endpoint-row,
       .skills a { grid-template-columns: 1fr; gap: 6px; }
-      .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
-      .section-meta { white-space: normal; }
     }
   </style>
 </head>
@@ -217,19 +184,13 @@ export function renderHome(catalog: CompassCatalog): Response {
       </div>
     </nav>
 
-    <section class="content">
-      <div class="section-head">
-        <h1>Current skills</h1>
-        <p class="section-meta">${skills.length} skills on <code>${escapeHtml(compassBranch)}</code> at <a href="${escapeHtml(revisionUrl)}"><code>${escapeHtml(shortRevision(revision))}</code></a></p>
+    <section class="content" aria-label="Compass MCP and skills">
+      <div class="endpoint-row">
+        <span class="endpoint-label">MCP endpoint</span>
+        <code class="endpoint-value">${MCP_ENDPOINT}</code>
       </div>
       <ul class="skills">${skillRows}
       </ul>
-    </section>
-
-    <section class="endpoint">
-      <h2>MCP endpoint</h2>
-      <p>Read-only. Every request resolves one Compass revision and reads all content from that revision.</p>
-      <code class="endpoint-code">${MCP_ENDPOINT}</code>
     </section>
 
     <footer>
