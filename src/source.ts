@@ -46,7 +46,7 @@ export class GitHubCompassSource {
   private headCache: RevisionCache | undefined;
   private readonly catalogCache = new Map<string, Promise<CompassCatalog>>();
 
-  constructor(fetcher: Fetcher = fetch, headCacheTtlMs = DEFAULT_HEAD_CACHE_TTL_MS) {
+  constructor(fetcher: Fetcher = (input, init) => globalThis.fetch(input, init), headCacheTtlMs = DEFAULT_HEAD_CACHE_TTL_MS) {
     this.fetcher = fetcher;
     this.headCacheTtlMs = headCacheTtlMs;
   }
