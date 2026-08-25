@@ -36,6 +36,10 @@ assert.doesNotMatch(home, /ariobarin \/ compass/);
 assert.doesNotMatch(home, />Status</);
 assert.doesNotMatch(home, />Online</);
 assert.doesNotMatch(home, />Compass MCP</);
+assert.doesNotMatch(home, /Engineering preferences and workflows for agents\./);
+assert.doesNotMatch(home, /Compass is reviewed source for portable agent behavior\./);
+assert.doesNotMatch(home, /Selected by the Compass manifest at this revision\./);
+assert.match(home, /<h1>Current skills<\/h1>/);
 assert.match(home, /https:\/\/compass\.ariobarin\.com\/mcp/);
 
 const faviconResponse = await handleCompassRequest(new Request("https://compass.ariobarin.com/favicon.svg"));

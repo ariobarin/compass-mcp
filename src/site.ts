@@ -99,34 +99,13 @@ export function renderHome(catalog: CompassCatalog): Response {
       font-size: 14px;
     }
 
-    .hero {
-      padding: 52px 0 34px;
-      max-width: 720px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(40px, 6vw, 64px);
-      line-height: 1.02;
-      letter-spacing: -0.045em;
-      font-weight: 680;
-    }
-
-    .lede {
-      max-width: 640px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: clamp(17px, 2vw, 20px);
-      line-height: 1.55;
-    }
-
     code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.92em;
     }
 
     section.content {
-      margin-top: 0;
+      margin-top: 48px;
     }
 
     .section-head {
@@ -138,17 +117,14 @@ export function renderHome(catalog: CompassCatalog): Response {
       border-bottom: 1px solid var(--line);
     }
 
+    h1,
     h2 {
       margin: 0;
-      font-size: 22px;
       letter-spacing: -0.025em;
     }
 
-    .section-note {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    h1 { font-size: 28px; }
+    h2 { font-size: 22px; }
 
     .section-meta {
       flex: 0 0 auto;
@@ -225,7 +201,6 @@ export function renderHome(catalog: CompassCatalog): Response {
       main { width: min(100% - 28px, 960px); }
       nav { align-items: flex-start; flex-direction: column; gap: 8px; }
       .nav-links { flex-wrap: wrap; gap: 12px; font-size: 13px; }
-      .hero { padding: 38px 0 30px; }
       .skills a { grid-template-columns: 1fr; gap: 6px; }
       .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
       .section-meta { white-space: normal; }
@@ -242,17 +217,9 @@ export function renderHome(catalog: CompassCatalog): Response {
       </div>
     </nav>
 
-    <header class="hero">
-      <h1>Engineering preferences and workflows for agents.</h1>
-      <p class="lede">Compass is reviewed source for portable agent behavior. This page and the ChatGPT MCP read the same exact Compass revision.</p>
-    </header>
-
     <section class="content">
       <div class="section-head">
-        <div>
-          <h2>Current skills</h2>
-          <p class="section-note">Selected by the Compass manifest at this revision.</p>
-        </div>
+        <h1>Current skills</h1>
         <p class="section-meta">${skills.length} skills on <code>${escapeHtml(compassBranch)}</code> at <a href="${escapeHtml(revisionUrl)}"><code>${escapeHtml(shortRevision(revision))}</code></a></p>
       </div>
       <ul class="skills">${skillRows}
