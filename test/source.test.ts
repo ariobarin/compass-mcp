@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { buildServerInstructions } from "../src/server.js";
 import { GitHubCompassSource } from "../src/source.js";
 
 const revision = "a".repeat(40);
@@ -60,4 +61,13 @@ test("fresh revision checks bypass the short head cache", async () => {
   await source.resolveRevision(true);
 
   assert.equal(calls.filter(url => url.includes(".git/info/refs?service=git-upload-pack")).length, 2);
+});
+
+test("server instructions open with the profile", async () => {
+  const source = new GitHubCompassSource(fixtureFetcher([]), 60_000);
+  const instructions = buildServerInstructions(await source.loadCurrentCatalog(true));
+
+  assert.ok(instructions.indexOf(profile.trim()) < 200);
+  assert.match(instructions, /- alpha: Alpha workflow\./);
+  assert.match(instructions, new RegExp(revision));
 });
