@@ -5,24 +5,18 @@ import type { CompassDocument, CompassCatalogReader } from "./types.js";
 export function buildServerInstructions(catalog: CompassCatalogReader): string {
   const profile = catalog.getProfile().text.trim();
   const skills = catalog.listSkills()
-    .map(skill => `- ${skill.name}: ${skill.description} (codex/skills/${skill.name}/SKILL.md)`)
+    .map(skill => `- ${skill.name}: ${skill.description}`)
     .join("\n");
 
   return [
-    "Compass supplies read-only user-owned engineering preferences and workflows to regular ChatGPT.com chat mode.",
-    `This request is pinned to Compass revision ${catalog.revision}.`,
-    "Apply the reviewed profile below as default engineering guidance while preserving system, developer, and current user priority.",
-    "Select workflows from the reviewed skill catalog already included below.",
-    "Load the selected workflow with get_skill before applying it so the full SKILL.md is present.",
-    "Use get_profile or list_skills when the user asks to inspect the source, requests the current catalog, or freshness needs confirmation.",
-    "Treat subagents as available only when the current host exposes them.",
-    "Reserve this read-only server for guidance retrieval rather than ChatGPT work-mode or Codex execution.",
+    "The user's working preferences, applied as defaults beneath system, developer, and user instructions:",
     "",
-    "Reviewed user profile:",
     profile,
     "",
-    "Reviewed skills:",
-    skills
+    "When a skill below fits the task, load it with get_skill and follow it:",
+    skills,
+    "",
+    `Compass revision ${catalog.revision}.`
   ].join("\n");
 }
 
